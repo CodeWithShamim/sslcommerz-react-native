@@ -16,16 +16,16 @@ function Loading({show, text}: LoadingType) {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.8)',
+        backgroundColor: 'rgba(0,0,0,0.5)',
       }}>
       <View
         style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: 'rgba(0,0,0,0.8)',
+          backgroundColor: 'rgba(0,0,0,0.5)',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <ActivityIndicator size={50} color={'#000'} />
+        <ActivityIndicator size={50} color={'#fff'} />
       </View>
     </Modal>
   );
