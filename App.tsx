@@ -30,23 +30,25 @@ const App = () => {
     const url = data?.url;
     const baseURL = 'http://10.0.2.2:5000/api/v1/ssl';
 
+    if (url === `${baseURL}/success`) {
+      setTimeout(() => {
+        setUrl('');
+        // Alert.alert('Congratulations!', 'Your payment completed.');
+      }, 2500);
+    }
+
     if (
-      url === `${baseURL}/success` ||
       url === `${baseURL}/fail` ||
       url === `${baseURL}/cancel` ||
       url === `${baseURL}/ipn`
     ) {
-      setTimeout(() => {
-        setUrl('');
-        url === `${baseURL}/success` &&
-          Alert.alert('Congratulations!', 'Your payment completed.');
-      }, 2000);
+      setUrl('');
     }
   };
 
   function onMessage(data: any) {
     Alert.alert(data);
-    console.log("msg", data);
+    console.log('msg', data);
   }
 
   return (
@@ -68,7 +70,7 @@ const App = () => {
           originWhitelist={['*']}
           onNavigationStateChange={TrackURL}
           source={{uri: url}}
-          style={{width: '100%', height: '80%'}}
+          style={{width: '100%', height: '100%'}}
           startInLoadingState={true}
           onMessage={onMessage}
           sharedCookiesEnabled={true}
