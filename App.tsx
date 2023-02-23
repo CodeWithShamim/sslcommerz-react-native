@@ -6,15 +6,19 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import React, {useState} from 'react';
 import axios from 'axios';
 import WebView from 'react-native-webview';
 import Loading from './src/components/Loading';
+import GetAllUrlParams from './src/utils/GetAllUrlParams';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 const App = () => {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isConfettiShow, setIsConfettiShow] = useState(false);
   const items = ['SSLCommerz', 'Bkash', 'Nagad'];
 
   const fetchPaymentURL = async () => {
@@ -30,11 +34,29 @@ const App = () => {
     const url = data?.url;
     const baseURL = 'http://10.0.2.2:5000/api/v1/ssl';
 
-    if (url === `${baseURL}/success`) {
-      setTimeout(() => {
-        setUrl('');
-        // Alert.alert('Congratulations!', 'Your payment completed.');
-      }, 2500);
+    interface paramsInterface {
+      status?: string;
+      tran_id?: string;
+      total_amount?: string;
+      method?: string;
+    };
+
+    if (url.includes('tran_id')) {
+      setUrl('');
+      const {status, tran_id, total_amount, method}:paramsInterface = GetAllUrlParams(url);
+
+      if (status) {
+        setIsConfettiShow(true);
+        setTimeout(() => setIsConfettiShow(false), 8000);
+        Alert.alert(
+          'Congratulations!',
+          `Your payment successfully completed.
+        Transaction ID: ${tran_id}
+        Total Amount: ${total_amount}
+        Payment Method: ${method}
+        `,
+        );
+      }
     }
 
     if (
@@ -85,6 +107,16 @@ const App = () => {
               <ActivityIndicator size="large" color="#000" />
             </View>
           )}
+        />
+      )}
+
+      {isConfettiShow && (
+        <ConfettiCannon
+          count={80}
+          autoStartDelay={1}
+          // fallSpeed={3000}
+          // explosionSpeed={500}
+          origin={{x: 0, y: 0}}
         />
       )}
     </View>
